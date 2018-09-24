@@ -33,9 +33,21 @@ public class TicTacToeController {
            two integers, the row and the column (for example, "1 1" for the
            center square of a 3 x 3 grid).  Make mark if input is valid, or show
            error message using view's showInputError() if input is invalid. */
-        
-        /* INSERT YOUR CODE HERE */
-        
+		int row;
+		int col;
+		row = keyboard.nextInt();
+		col = keyboard.nextInt();
+		
+		/*could not call private methods isSquareMarked or isValidSquare directly
+		   only public method that called both was makeMark which is boolean
+		   theory: makeMark checks for square validity and emptiness before placing a mark.
+		   that noted, calling it should validate input then make the players mark*/
+		if (!(model.makeMark(row, col))) { 
+			view.showInputError();
+		}else {
+			model.makeMark(row, col);
+		}
+		
     }
 
 }
