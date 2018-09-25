@@ -25,20 +25,12 @@ public class TicTacToe {
 
         TicTacToeModel model = new TicTacToeModel(width);
         TicTacToeView view = new TicTacToeView(model);
-        TicTacToeController controller = new TicTacToeController(model, view);
         
-        /* MAIN LOOP */
-
-        while (!model.isGameover()) {
-            
-            view.viewModel();
-            controller.controlModel();
-            
-        }
+        
         
         /* Game is over; show the final board and the winner */
 
-        view.viewModel();
+        view.updateSquares();
 
         view.showResult(model.getResult().toString());
 

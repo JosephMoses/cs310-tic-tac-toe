@@ -1,68 +1,91 @@
 package edu.jsu.mcis;
 
-public class TicTacToeView {
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
-    private TicTacToeModel model;
+public class TicTacToeView extends JPanel implements ActionListener {
     
-    /* CONSTRUCTOR */
-	
+    TicTacToeModel model;
+
+    private JButton[][] squares;
+    private JPanel squaresPanel;
+    private JLabel resultLabel;
+
     public TicTacToeView(TicTacToeModel model) {
-        
+
         this.model = model;
+
+        int width = model.getWidth();
+
+        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        squares = new JButton[width][width];
+        squaresPanel = new JPanel(new GridLayout(width,width));
+        resultLabel = new JLabel();
+        resultLabel.setName("ResultLabel");
         
+        for (int row = 0; row < width; row++){            
+            for (int col = 0; col < width; col++){                
+                squares[row][col] = new JButton(); 
+                squares[row][col].addActionListener(this);
+                squares[row][col].setName("Square" + row + col);
+                squares[row][col].setPreferredSize(new Dimension(64,64));
+                squaresPanel.add(squares[row][col]);                
+            }            
+        }
+		
+        this.add(squaresPanel);
+        this.add(resultLabel);
+        
+        resultLabel.setText("Welcome to Tic-Tac-Toe!");
     }
-	
-    public void viewModel() {
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
         
-        /* Print the board to the console (see examples) */
+        /* Handle button clicks.  Extract the row and col values from the name
+           of the button that was clicked, then make the mark in the grid using
+           the Model's "makeMark()" method.  Finally, use the "updateSquares()"
+           method to refresh the View.  If the game is over, show the result
+           (from the Model's "getResult()" method) in the result label. */
         
-        /* INSERT YOUR CODE HERE */
-		System.out.print("\n\n");
-		System.out.print("  ");
-		for (int i = 0; i < model.getWidth(); i++) {
-			System.out.print(i);
-		}
-		System.out.print("\n\n");
-		for (int i = 0; i < model.getWidth(); i++) {
-			System.out.print(i+" ");
-			for (int j = 0; j < model.getWidth(); j++) {
-				System.out.print(model.getMark(i,j));
+        String name = ((JButton) event.getSource()).getName(); // Get button name
+        
+        // INSERT YOUR CODE HERE
+		
+		String rowCol [] = name.split("[0-9]+");
+		int row = Integer.parseInt(rowCol[0]);
+		int col = Integer.parseInt(rowCol[-1]);
+		model.makeMark(row, col);
+		updateSquares();
+		
+		int w = model.getWidth();
+		
+		if (model.isGameover()){
+			for (int i = 0; i < w; i++) {
+				for (int j = 0; j < w; j++) {
+					squares[i][j].setEnabled (false);
+				}
 			}
-			System.out.print("\n");
 		}
-		System.out.print("\n\n");
 
     }
+        
+    public void updateSquares() {
 
-    public void showNextMovePrompt() {
-
-        /* Display a prompt for the player's next move (see examples) */
-
-        /* INSERT YOUR CODE HERE */
-		if (model.isXTurn()) {
-			System.out.print("Player 1 (X) Move:");
-		} else {
-			System.out.print("Player 2 (Y) Move:");
+        /* Loop through all View buttons and (re)set the text of each button
+           to reflect the grid contents (use the Model's "getMark()" method). */
+		   int width = model.getWidth();
+		for (int row = 0; row < width; row++) {
+			for (int col = 0; col < width; col++) {
+				squares[row][col].setText(model.getMark(row, col).toString());
+			}
 		}
-		System.out.print("\nEnter the row and column numbers, separated by a space: ");
 
     }
-
-    public void showInputError() {
-
-        /* Display an error if input is invalid (see examples) */
-
-        /* INSERT YOUR CODE HERE */
-		System.out.print("Your chosen input is not valid, please try again.");
-
+        
+    public void showResult(String message) {
+        resultLabel.setText(message);
     }
 
-    public void showResult(String r) {
-
-        /* Display final winner */
-
-        System.out.println(r + "!");
-
-    }
-	
 }
