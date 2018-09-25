@@ -53,9 +53,11 @@ public class TicTacToeView extends JPanel implements ActionListener {
         
         // INSERT YOUR CODE HERE
 		
-		String rowCol [] = name.split("[0-9]+");
+		int row = Integer.parseInt(name.substring(6,7));
+		int col = Integer.parseInt(name.substring(7,8));
+		/*String rowCol [] = name.split("[0-9]+");
 		int row = Integer.parseInt(rowCol[0]);
-		int col = Integer.parseInt(rowCol[-1]);
+		int col = Integer.parseInt(rowCol[-1]);*/
 		model.makeMark(row, col);
 		updateSquares();
 		
@@ -67,6 +69,12 @@ public class TicTacToeView extends JPanel implements ActionListener {
 					squares[i][j].setEnabled (false);
 				}
 			}
+			if (model.getResult().toString() == "Tie") {
+				showResult("TIE");
+			}else {
+				showResult(model.getResult().toString());
+			}
+			//showResult(model.getResult().toString());
 		}
 
     }
